@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
+
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -8,6 +9,16 @@ export const App = ()=>  {
     const [count, setCount] = useState(0)
 
     const papaName: string = `${import.meta.env.VITE_DADA_NAME}`;
+
+    // below: trying to get secret displayed on page for validation
+    const [apiUrl, setApiUrl] = useState("");
+
+    useEffect(() => {
+        fetch("/api/secrets")
+            .then((response) => response.json())
+            .then((data) => setApiUrl(data.apiUrl))
+            .catch((error) => console.error("Error fetching secret:", error));
+    }, []);
 
     return (
         <>
@@ -32,6 +43,8 @@ export const App = ()=>  {
                 Click on the Vite and React logos to learn more
             </p>
             <p>PapaName: {papaName}</p>
+            {/*below: trying to get secret displayed on page for validation*/}
+            <p>API URL: {apiUrl ? apiUrl : "Loading..."}</p>
         </>
     )
 }
